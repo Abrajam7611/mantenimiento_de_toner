@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'email_login.dart';
+import 'forgot_password.dart';
 
-class LoginScreen extends StatefulWidget {
+class EmailLoginScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _EmailLoginScreenState createState() => _EmailLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController nombreController = TextEditingController();
-  final TextEditingController telefonoController = TextEditingController();
-  final TextEditingController codigoController = TextEditingController();
+class _EmailLoginScreenState extends State<EmailLoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final ScrollController _scrollController = ScrollController();
   bool isLoading = false;
 
   void _handleLogin() {
@@ -24,27 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isLoading = false;
         });
-        print("Usuario autenticado");
+        print("Usuario autenticado con correo");
       });
     }
   }
-
-  void _scrollToField(GlobalKey key) {
-    final context = key.currentContext;
-    if (context != null) {
-      Future.delayed(Duration(milliseconds: 300), () {
-        Scrollable.ensureVisible(
-          context,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      });
-    }
-  }
-
-  final GlobalKey _nombreKey = GlobalKey();
-  final GlobalKey _telefonoKey = GlobalKey();
-  final GlobalKey _codigoKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: SingleChildScrollView(
-                controller: _scrollController,
                 keyboardDismissBehavior:
                     ScrollViewKeyboardDismissBehavior.onDrag,
                 child: Padding(
@@ -115,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Recuerda solicitar tu código',
+                          'Ingresa con tu cuenta',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -124,26 +104,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 20),
-                        _buildTextField('Nombre', nombreController, _nombreKey),
+                        _buildTextField('Correo Electrónico', emailController),
                         SizedBox(height: 15),
                         _buildTextField(
-                          'Teléfono',
-                          telefonoController,
-                          _telefonoKey,
-                          keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Ingrese su teléfono';
-                            }
-                            if (value.length < 10 ||
-                                !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                              return 'Número no válido';
-                            }
-                            return null;
-                          },
+                          'Contraseña',
+                          passwordController,
+                          isPassword: true,
                         ),
-                        SizedBox(height: 15),
-                        _buildTextField('Código', codigoController, _codigoKey),
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPasswordScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              '¿Olvidaste la contraseña?',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
                         SizedBox(height: 30),
 
                         SizedBox(
@@ -176,15 +161,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 15),
                         TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EmailLoginScreen(),
-                              ),
-                            );
+                            Navigator.pop(context);
                           },
                           child: Text(
-                            'Ingresar con Correo Electrónico',
+                            'Ingresar con Código de acceso',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -253,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'Recuerda solicitar tu código',
+                        'Ingresa con tu cuenta',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -262,26 +242,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 20),
-                      _buildTextField('Nombre', nombreController, _nombreKey),
+                      _buildTextField('Correo Electrónico', emailController),
                       SizedBox(height: 15),
                       _buildTextField(
-                        'Teléfono',
-                        telefonoController,
-                        _telefonoKey,
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Ingrese su teléfono';
-                          }
-                          if (value.length < 10 ||
-                              !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                            return 'Número no válido';
-                          }
-                          return null;
-                        },
+                        'Contraseña',
+                        passwordController,
+                        isPassword: true,
                       ),
-                      SizedBox(height: 15),
-                      _buildTextField('Código', codigoController, _codigoKey),
+                      SizedBox(height: 10),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            '¿Olvidaste la contraseña?',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 30),
 
                       SizedBox(
@@ -314,15 +299,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 15),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EmailLoginScreen(),
-                            ),
-                          );
+                          Navigator.pop(context);
                         },
                         child: Text(
-                          'Ingresar con Correo Electrónico',
+                          'Ingresar con Código de acceso',
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -342,32 +322,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildTextField(
     String label,
-    TextEditingController controller,
-    GlobalKey key, {
-    TextInputType keyboardType = TextInputType.text,
-    String? Function(String?)? validator,
+    TextEditingController controller, {
+    bool isPassword = false,
   }) {
-    return Focus(
-      onFocusChange: (hasFocus) {
-        if (hasFocus) {
-          _scrollToField(key);
-        }
-      },
-      child: TextFormField(
-        key: key,
-        controller: controller,
-        keyboardType: keyboardType,
-        validator: validator,
-        decoration: InputDecoration(
-          labelText: label,
-          filled: true,
-          fillColor: Color(0xFFF0D4FA),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
-          ),
+    return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Color(0xFFF0D4FA),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Este campo es obligatorio';
+        }
+        if (label == 'Correo Electrónico' && !value.contains('@')) {
+          return 'Ingrese un correo válido';
+        }
+        return null;
+      },
     );
   }
 }
