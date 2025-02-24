@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "154669847527",
+    "project_id": "mantenimientotoner",
+    "storage_bucket": "mantenimientotoner.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154669847527:android:0ebc8e29df391b1b40a342",
+        "android_client_info": {
+          "package_name": "com.example.mantenimiento_toner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnUwrCQiTuSe3D1NhVRP9lX45ySHl2VfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

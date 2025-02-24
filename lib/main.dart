@@ -1,9 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mantenimiento_toner/views/auth/email_login.dart';
 import 'package:mantenimiento_toner/views/auth/forgot_password.dart';
 import 'package:mantenimiento_toner/views/auth/login.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Asegura que Flutter esté inicializado
+  await Firebase.initializeApp(); // Inicializa Firebase
   runApp(MyApp());
 }
 
