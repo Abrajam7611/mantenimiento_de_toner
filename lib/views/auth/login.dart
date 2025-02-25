@@ -9,7 +9,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   // Controladores de texto para los campos de entrada
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController telefonoController = TextEditingController();
@@ -23,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey _telefonoKey = GlobalKey();
   final GlobalKey _codigoKey = GlobalKey();
 
-  // Método para manejar el inicio de sesión con código
+  // Método para manejar el inicio de sesión con código
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
@@ -35,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Método para hacer scroll automáticamente a un campo de entrada cuando se enfoca
+  // Método para hacer scroll automáticamente a un campo de entrada cuando se enfoca
   void _scrollToField(GlobalKey key) {
     final context = key.currentContext;
     if (context != null) {
@@ -51,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Determina si la pantalla es lo suficientemente grande para usar el diseño web
+    // Determina si la pantalla es lo suficientemente grande para usar el diseño web
     final bool isLargeScreen = MediaQuery.of(context).size.width > 600;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -60,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Diseño para dispositivos móviles
+  // Diseño para dispositivos móviles
   Widget _buildMobileLayout() {
     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
@@ -84,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Diseño para pantallas grandes (Web)
+  // Diseño para pantallas grandes (Web)
   Widget _buildWebLayout() {
     return Row(
       children: [
@@ -100,14 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Formulario de inicio de sesión
+  // Formulario de inicio de sesión
   Widget _buildLoginForm() {
     return Form(
       key: _formKey,
       child: Column(
         children: [
           Text(
-            'Recuerda solicitar tu código',
+            'Recuerda solicitar tu código',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -115,20 +114,20 @@ class _LoginScreenState extends State<LoginScreen> {
           _buildTextField('Nombre', nombreController, _nombreKey),
           SizedBox(height: 7),
           _buildTextField(
-            'Teléfono',
+            'Teléfono',
             telefonoController,
             _telefonoKey,
             keyboardType: TextInputType.phone,
             validator: (value) {
-              if (value == null || value.isEmpty) return 'Ingrese su teléfono';
+              if (value == null || value.isEmpty) return 'Ingrese su teléfono';
               if (value.length < 10 || !RegExp(r'^[0-9]+$').hasMatch(value)) {
-                return 'Número no válido';
+                return 'Número no válido';
               }
               return null;
             },
           ),
           SizedBox(height: 7),
-          _buildTextField('Código', codigoController, _codigoKey),
+          _buildTextField('Código', codigoController, _codigoKey),
           SizedBox(height: 20),
           _buildLoginButton(),
           SizedBox(height: 15),
@@ -138,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Encabezado del diseño móvil
+  // Encabezado del diseño móvil
   Widget _buildHeader() {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.50,
@@ -153,13 +152,17 @@ class _LoginScreenState extends State<LoginScreen> {
               Image.asset('assets/images/login.png', width: 130, height: 130),
               SizedBox(height: 5),
               Text(
-                'Mantenimiento y Gestión de Tóner',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                'Mantenimiento y Gestión de Tóner',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 5),
               Text(
-                'Optimiza tu impresión, gestiona tu tóner con precisión',
+                'Optimiza tu impresión, gestiona tu tóner con precisión',
                 style: TextStyle(fontSize: 14, color: Colors.greenAccent),
                 textAlign: TextAlign.center,
               ),
@@ -170,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Encabezado del diseño web
+  // Encabezado del diseño web
   Widget _buildHeaderWeb() {
     return Container(
       color: Color(0xFF68377A),
@@ -178,28 +181,21 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/login.png',
-              width: 130, 
-              height: 130,
-              ),
+            Image.asset('assets/images/login.png', width: 130, height: 130),
             SizedBox(height: 5),
             Text(
-              'Mantenimiento y Gestión de Tóner',
+              'Mantenimiento y Gestión de Tóner',
               style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold, 
-                color: Colors.white
-                ),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
             Text(
-              'Optimiza tu impresión, gestiona tu tóner con precisión',
-              style: TextStyle(
-                fontSize: 16, 
-                color: Colors.greenAccent,
-                ),
+              'Optimiza tu impresión, gestiona tu tóner con precisión',
+              style: TextStyle(fontSize: 16, color: Colors.greenAccent),
               textAlign: TextAlign.center,
             ),
           ],
@@ -229,13 +225,16 @@ class _LoginScreenState extends State<LoginScreen> {
           labelText: label,
           filled: true,
           fillColor: Color(0xFFF0D4FA),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
   }
 
-  // Botón para iniciar sesión
+  // Botón para iniciar sesión
   Widget _buildLoginButton() {
     return SizedBox(
       width: double.infinity,
@@ -244,23 +243,39 @@ class _LoginScreenState extends State<LoginScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xFF68377A),
           padding: EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           elevation: 5,
         ),
-        child: isLoading
-            ? CircularProgressIndicator(color: Colors.white)
-            : Text('Ingresar', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+        child:
+            isLoading
+                ? CircularProgressIndicator(color: Colors.white)
+                : Text(
+                  'Ingresar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
       ),
     );
   }
 
-  // Botón para iniciar sesión 
+  // Botón para iniciar sesión
   Widget _buildEmailLoginButton() {
     return TextButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EmailLoginScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EmailLoginScreen()),
+        );
       },
-      child: Text('Ingresar con Correo Electrónico', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+      child: Text(
+        'Ingresar con Correo Electrónico',
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
@@ -271,8 +286,18 @@ class BackgroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xFF68377A);
     Path path = Path()..lineTo(0, size.height * 0.85);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.75, size.width * 0.5, size.height * 0.85);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.95, size.width, size.height * 0.85);
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.75,
+      size.width * 0.5,
+      size.height * 0.85,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.95,
+      size.width,
+      size.height * 0.85,
+    );
     path.lineTo(size.width, 0);
     path.close();
     canvas.drawPath(path, paint);

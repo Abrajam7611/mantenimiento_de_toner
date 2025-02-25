@@ -1,11 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'firebase_options.dart'; 
-import 'package:mantenimiento_toner/views/auth/login.dart'; 
+import 'firebase_options.dart';
+import 'package:mantenimiento_toner/views/auth/login.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     print("Firebase inicializado correctamente");
   } catch (e) {
     print("Error al inicializar Firebase: $e");
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Mantenimiento Tóner',
+      title: 'Mantenimiento Tóner',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: LoginScreen(),
     );

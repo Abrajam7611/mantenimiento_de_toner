@@ -18,14 +18,14 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance; 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isLoading = false;
 
   // Claves globales para controlar el enfoque de los campos de entrada
   final GlobalKey _emailKey = GlobalKey();
   final GlobalKey _passwordKey = GlobalKey();
 
-  // Método para manejar el inicio de sesión con email
+  // Método para manejar el inicio de sesión con email
   void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
@@ -36,42 +36,48 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
           password: passwordController.text,
         );
         String uid = userCredential.user!.uid;
-        DocumentSnapshot userDoc = await _firestore.collection('users').doc(uid).get();
+        DocumentSnapshot userDoc =
+            await _firestore.collection('users').doc(uid).get();
 
         if (userDoc.exists) {
           // El usuario existe en Firestore
           setState(() => isLoading = false);
-          print("Usuario autenticado y validado: ${userCredential.user!.email}");
+          print(
+            "Usuario autenticado y validado: ${userCredential.user!.email}",
+          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(email: userCredential.user!.email!),
+              builder:
+                  (context) => HomeScreen(email: userCredential.user!.email!),
             ),
           );
         } else {
           setState(() => isLoading = false);
-          print("El usuario no está registrado en Firestore");
+          print("El usuario no está registrado en Firestore");
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("El usuario no está registrado en Firestore")),
+            SnackBar(
+              content: Text("El usuario no está registrado en Firestore"),
+            ),
           );
         }
       } on FirebaseAuthException catch (e) {
         setState(() => isLoading = false);
-        print("Error de autenticación: ${e.message}");
+        print("Error de autenticación: ${e.message}");
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error de autenticación: ${e.message}")),
+          SnackBar(content: Text("Error de autenticación: ${e.message}")),
         );
       } catch (e) {
         setState(() => isLoading = false);
         print("Error inesperado: $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error inesperado: $e")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error inesperado: $e")));
       }
     }
   }
 
-  // Método para hacer scroll automáticamente a un campo de entrada cuando se enfoca
+  // Método para hacer scroll automáticamente a un campo de entrada cuando se enfoca
   void _scrollToField(GlobalKey key) {
     final context = key.currentContext;
     if (context != null) {
@@ -87,7 +93,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Determina si la pantalla es lo suficientemente grande para usar el diseño web
+    // Determina si la pantalla es lo suficientemente grande para usar el diseño web
     final bool isLargeScreen = MediaQuery.of(context).size.width > 600;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -96,7 +102,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-  // Diseño para dispositivos móviles
+  // Diseño para dispositivos móviles
   Widget _buildMobileLayout() {
     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
@@ -120,7 +126,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-  // Diseño para pantallas grandes (Web)
+  // Diseño para pantallas grandes (Web)
   Widget _buildWebLayout() {
     return Row(
       children: [
@@ -136,7 +142,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-  // Formulario de inicio de sesión
+  // Formulario de inicio de sesión
   Widget _buildLoginForm() {
     return Form(
       key: _formKey,
@@ -148,16 +154,29 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 15),
-          _buildTextField('Correo Electrónico', emailController, _emailKey, validator: (value) {
-            if (value == null || value.isEmpty) return 'Ingrese su correo';
-            if (!value.contains('@')) return 'Correo no válido';
-            return null;
-          }),
+          _buildTextField(
+            'Correo Electrónico',
+            emailController,
+            _emailKey,
+            validator: (value) {
+              if (value == null || value.isEmpty) return 'Ingrese su correo';
+              if (!value.contains('@')) return 'Correo no válido';
+              return null;
+            },
+          ),
           SizedBox(height: 7),
-          _buildTextField('Contraseña', passwordController, _passwordKey, isPassword: true, validator: (value) {
-            if (value == null || value.isEmpty) return 'Ingrese su contraseña';
-            return null;
-          }),
+          _buildTextField(
+            'Contraseña',
+            passwordController,
+            _passwordKey,
+            isPassword: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Ingrese su contraseña';
+              }
+              return null;
+            },
+          ),
           SizedBox(height: 10),
           Align(
             alignment: Alignment.centerRight,
@@ -165,10 +184,15 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => ForgotPasswordScreen(),
+                  ),
                 );
               },
-              child: Text('¿Olvidaste la contraseña?', style: TextStyle(color: Colors.black)),
+              child: Text(
+                '¿Olvidaste la contraseña?',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           ),
           SizedBox(height: 20),
@@ -179,8 +203,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               Navigator.pop(context);
             },
             child: Text(
-              'Ingresar con Código de acceso',
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              'Ingresar con Código de acceso',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -188,7 +215,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-  // Encabezado del diseño móvil
+  // Encabezado del diseño móvil
   Widget _buildHeader() {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.50,
@@ -203,13 +230,17 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               Image.asset('assets/images/login.png', width: 130, height: 130),
               SizedBox(height: 5),
               Text(
-                'Mantenimiento y Gestión de Tóner',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                'Mantenimiento y Gestión de Tóner',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 5),
               Text(
-                'Optimiza tu impresión, gestiona tu tóner con precisión',
+                'Optimiza tu impresión, gestiona tu tóner con precisión',
                 style: TextStyle(fontSize: 14, color: Colors.greenAccent),
                 textAlign: TextAlign.center,
               ),
@@ -220,7 +251,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     );
   }
 
-  // Encabezado del diseño web
+  // Encabezado del diseño web
   Widget _buildHeaderWeb() {
     return Container(
       color: Color(0xFF68377A),
@@ -228,28 +259,21 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/login.png',
-              width: 130, 
-              height: 130,
-            ),
+            Image.asset('assets/images/login.png', width: 130, height: 130),
             SizedBox(height: 5),
             Text(
-              'Mantenimiento y Gestión de Tóner',
+              'Mantenimiento y Gestión de Tóner',
               style: TextStyle(
-                fontSize: 24, 
-                fontWeight: FontWeight.bold, 
-                color: Colors.white
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
             Text(
-              'Optimiza tu impresión, gestiona tu tóner con precisión',
-              style: TextStyle(
-                fontSize: 16, 
-                color: Colors.greenAccent,
-              ),
+              'Optimiza tu impresión, gestiona tu tóner con precisión',
+              style: TextStyle(fontSize: 16, color: Colors.greenAccent),
               textAlign: TextAlign.center,
             ),
           ],
@@ -279,13 +303,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
           labelText: label,
           filled: true,
           fillColor: Color(0xFFF0D4FA),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
   }
 
-  // Botón para iniciar sesión 
+  // Botón para iniciar sesión
   Widget _buildLoginButton() {
     return SizedBox(
       width: double.infinity,
@@ -294,12 +321,22 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Color(0xFF68377A),
           padding: EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           elevation: 5,
         ),
-        child: isLoading
-            ? CircularProgressIndicator(color: Colors.white)
-            : Text('Ingresar', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+        child:
+            isLoading
+                ? CircularProgressIndicator(color: Colors.white)
+                : Text(
+                  'Ingresar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
       ),
     );
   }
@@ -311,8 +348,18 @@ class BackgroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = Color(0xFF68377A);
     Path path = Path()..lineTo(0, size.height * 0.85);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.75, size.width * 0.5, size.height * 0.85);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.95, size.width, size.height * 0.85);
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.75,
+      size.width * 0.5,
+      size.height * 0.85,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.95,
+      size.width,
+      size.height * 0.85,
+    );
     path.lineTo(size.width, 0);
     path.close();
     canvas.drawPath(path, paint);
