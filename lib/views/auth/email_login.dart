@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mantenimiento_toner/views/home/home.dart';
 import 'forgot_password.dart';
 
 class EmailLoginScreen extends StatefulWidget {
@@ -14,6 +17,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; 
   bool isLoading = false;
 
   // Claves globales para controlar el enfoque de los campos de entrada
@@ -21,14 +26,48 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   final GlobalKey _passwordKey = GlobalKey();
 
   // Método para manejar el inicio de sesión con email
-  void _handleLogin() {
+  void _handleLogin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
-      Future.delayed(Duration(seconds: 2), () {
+      try {
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        String uid = userCredential.user!.uid;
+        DocumentSnapshot userDoc = await _firestore.collection('users').doc(uid).get();
+
+        if (userDoc.exists) {
+          // El usuario existe en Firestore
+          setState(() => isLoading = false);
+          print("Usuario autenticado y validado: ${userCredential.user!.email}");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(email: userCredential.user!.email!),
+            ),
+          );
+        } else {
+          setState(() => isLoading = false);
+          print("El usuario no está registrado en Firestore");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("El usuario no está registrado en Firestore")),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
         setState(() => isLoading = false);
-        print("Usuario autenticado con correo");
-      });
+        print("Error de autenticación: ${e.message}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error de autenticación: ${e.message}")),
+        );
+      } catch (e) {
+        setState(() => isLoading = false);
+        print("Error inesperado: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error inesperado: $e")),
+        );
+      }
     }
   }
 
